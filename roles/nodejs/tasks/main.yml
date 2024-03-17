@@ -1,0 +1,40 @@
+- name: Git Stash to remove modified file from the environment
+  become: yes
+  become_user: ubuntu
+  shell: git stash
+  args:
+    chdir: /home/ubuntu/nodejs-test-app-1/
+
+- name: Git Pull from Environment Branch
+  become: yes
+  become_user: ubuntu
+  shell: git pull
+  args:
+    chdir: /home/ubuntu/nodejs-test-app-1/
+
+- name: NPM Install
+  become: yes
+  become_user: ubuntu
+  shell: npm --no-color install
+  args:
+    chdir: /home/ubuntu/nodejs-test-app-1/  
+
+- name: Configurations for echosystem and staging json
+  copy: src={{item.src}} dest={{item.dest}} owner=ubuntu group=ubuntu mode=0664
+  with_items:
+    - { src: 'templates/ecosystem.config.j2', dest: '/home/ubuntu/nodejs-test-app-1/ecosystem.config.js' }
+
+- name: Deleteing NodeJS App 1 PM2
+  become: yes
+  become_user: ubuntu
+  shell: pm2 delete ecosystem.config.js
+  args:
+    chdir: /home/ubuntu/nodejs-test-app-1/
+
+- name: Starting NodeJS App 1 PM2
+  become: yes
+  become_user: ubuntu
+  shell: pm2 start
+  args:
+    chdir: /home/ubuntu/nodejs-test-app-1/
+
