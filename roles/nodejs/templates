@@ -1,0 +1,10 @@
+module.exports = {
+    apps: [
+        {
+            name: "nodejs-test-app-1",
+            script: "app.js",
+            instances: "1"
+        }
+    ]
+}
+
