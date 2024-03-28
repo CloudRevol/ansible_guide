@@ -1,0 +1,12 @@
+- name: Creating SSH User on Servers
+  ansible.builtin.user:
+     name: "{{ createuser }}"
+     create_home: yes
+     shell: /bin/bash
+     password: "{{ user_password | password_hash('sha512')  }}"
+
+- name: Adding Sudeors 
+  lineinfile: dest=/etc/sudoers state=present line='{{item}}'
+  with_items:
+   - '{{createuser}} ALL=(ALL) NOPASSWD:ALL'          
+

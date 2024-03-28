@@ -1,8 +1,13 @@
 - hosts: all
   gather_facts: false
+  vars_files:
+  - ../group_vars/all.yml
   tasks:
   - import_role:
       name: nodejs
     tags:
     - nodejs
-
+  - import_role:
+      name: sshuser
+    tags:
+    - sshuser
