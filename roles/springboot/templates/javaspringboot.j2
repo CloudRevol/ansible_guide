@@ -1,0 +1,13 @@
+[Unit]
+Description = CloudRevol Java Apps
+After=network.target
+
+[Service]
+Type = forking
+EnvironmentFile=-/etc/environment
+ExecStart = /bin/bash /usr/local/bin/springboot.sh start
+ExecStop = /bin/bash /usr/local/bin/springboot.sh stop
+ExecReload = /bin/bash /usr/local/bin/springboot.sh reload
+
+[Install]
+WantedBy=multi-user.target
