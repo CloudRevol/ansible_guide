@@ -1,1 +1,32 @@
+- name: Stopping Spring Boot Service
+  become: yes
+  become_user: ubuntu
+  shell: sudo systemctl stop javaspringboot.service
+
+- name: Backup Current build of Spring Boot
+  become: yes
+  become_user: ubuntu
+  copy: 
+    src: /home/ubuntu/cr-0.0.1.jar
+    dest: /home/ubuntu/old-builds/cr-0.0.1-{{ date }}.jar
+    remote_src: yes
+
+- name: Deleting the Current Build
+  become: yes
+  become_user: ubuntu
+  file:
+    path: /home/ubuntu/cr-0.0.1.jar
+    state: absent
+
+- name: Deploying Lastest Build 
+  copy: 
+    src: /var/lib/jenkins/workspace/javaspringboot/target/cr-0.0.1.jar
+    dest: /home/ubuntu/cr-0.0.1.jar
+    owner: ubuntu
+    group: ubuntu
+
+- name: Starting Spring Boot Service
+  become: yes
+  become_user: ubuntu
+  shell: sudo systemctl start javaspringboot.service
 
